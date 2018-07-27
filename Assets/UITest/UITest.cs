@@ -186,6 +186,18 @@ public class UITest
         }
     }
 
+	protected class ObjectAnimatorPlaying : Condition
+	{
+		public ObjectAnimatorPlaying(string objectName, string param) :base (objectName, param) {}
+		
+		public override bool Satisfied()
+		{
+			GameObject gameObject = GameObject.Find(objectName);
+			return gameObject.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName(param);
+		}
+	}
+
+
     protected class ObjectAppeared<T> : Condition where T : Component
     {
         public override bool Satisfied()
