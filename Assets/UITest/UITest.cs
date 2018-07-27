@@ -35,8 +35,13 @@ public class UITest
 
     protected Coroutine WaitFor(Condition condition)
     {
-        return StartCoroutine(WaitForInternal(condition, Environment.StackTrace));
+        return StartCoroutine(WaitForInternal(condition, Environment.StackTrace, WaitTimeout));
     }
+
+	protected Coroutine WaitFor(Condition condition, float timeout)
+	{
+		return StartCoroutine(WaitForInternal(condition, Environment.StackTrace, timeout));
+	}
                 
     protected Coroutine LoadScene(string name)
     {
@@ -72,12 +77,12 @@ public class UITest
         return StartCoroutine(PressInternal(o));
     }
 
-    IEnumerator WaitForInternal(Condition condition, string stackTrace)
+    IEnumerator WaitForInternal(Condition condition, string stackTrace, float timeout)
     {
         float time = 0;
         while (!condition.Satisfied())
         {
-            if (time > WaitTimeout)
+			if (time > timeout)
                 throw new Exception("Operation timed out: " + condition + "\n" + stackTrace);            
             for (int i = 0; i < WaitIntervalFrames; i++) {
                 time += Time.unscaledDeltaTime;
