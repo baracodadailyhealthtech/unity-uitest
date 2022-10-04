@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System;
 using System.IO;
+using UnityEditor.SceneManagement;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
@@ -48,12 +49,12 @@ public class UITest
         return StartCoroutine(LoadSceneInternal(name));
     }
 
-    IEnumerator LoadSceneInternal(string name)
-    {           
+    private IEnumerator LoadSceneInternal(string name)
+    {
 #if UNITY_EDITOR
         if (name.Contains(".unity"))
         {
-            UnityEditor.EditorApplication.LoadLevelInPlayMode(name);
+            EditorSceneManager.LoadSceneInPlayMode(name, new LoadSceneParameters());
             yield return WaitFor(new SceneLoaded(Path.GetFileNameWithoutExtension(name)));
             yield break;
         }
